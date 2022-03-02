@@ -29,7 +29,7 @@ else{
 #Function to check the network first, will exit if the issue is a network issue.
 function CheckNet(){
 
-    Test-Connection $PCID
+    Test-Connection 9.9.9.9
     if(!$?){
     
         echo 'Error! device cannot connect to exchange because it is not connected to the internet! please reconnect to your network and try again!'
