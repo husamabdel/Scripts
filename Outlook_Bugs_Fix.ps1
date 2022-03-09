@@ -8,7 +8,7 @@
 
 $USER = $env:UserName
 $PCID = $(hostname)
-$SERVER = '140.147.32.139'
+$SERVER = '9.9.9.9'
 $PROCESS_TERMINATE = 'Outlook.exe', 'ZoomOutlookIMPlugin.exe', 'lync.exe', 'UcMapi.exe', 'atmgr.exe', 'CiscoWebexStart.exe'
 
 #Check version installed:
