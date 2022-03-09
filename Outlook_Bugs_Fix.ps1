@@ -1,4 +1,4 @@
-﻿################################
+################################
 #
 #       Outlook bugs fix
 #       @Author: Husam Abdalla
@@ -8,6 +8,7 @@
 
 $USER = $env:UserName
 $PCID = $(hostname)
+$SERVER = '140.147.32.139'
 $PROCESS_TERMINATE = 'Outlook.exe', 'ZoomOutlookIMPlugin.exe', 'lync.exe', 'UcMapi.exe', 'atmgr.exe', 'CiscoWebexStart.exe'
 
 #Check version installed:
@@ -29,7 +30,7 @@ else{
 #Function to check the network first, will exit if the issue is a network issue.
 function CheckNet(){
 
-    Test-Connection 9.9.9.9
+    Test-Connection $SERVER
     if(!$?){
     
         echo 'Error! device cannot connect to exchange because it is not connected to the internet! please reconnect to your network and try again!'
@@ -59,12 +60,57 @@ function KillTasks(){
 
 }
 
+
+function testStartup(){
+
+    $selection = 'Sent To OneNote.lnk', 'Zoom.lnk', 'Skype.lnk', 'Outlook.lnk'
+
+    if(Test-Path "$HOME\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"){
+    
+        
+        for($i = 0; $i -lt $selection.Count; $i++){
+        
+            $FLAG = $(ls "$HOME\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup" | Select-String $selection[$i])
+            if($FLAG -eq $null){
+            
+                Write-Host 'Doesnt cause errors, continue'
+
+            }
+
+            else{
+            
+                Remove-Item -Path "$HOME\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\$selection[$i]"
+
+            }
+
+
+        }
+
+    
+    }
+
+    else{
+    
+        Write-Host 'Startups not enabled? '
+        exit 1
+
+    }
+
+}
+
 #Calling in Net Check
 
 CheckNet
 
 #Calling in killTasks and flushing the dns, as well as starting outlook again.
+
 KillTasks
+
+#Remove problematic startups:
+
+testStartup
+
+#Lastly: 
 
 ipconfig /flushdns
 start Outlook.exe
