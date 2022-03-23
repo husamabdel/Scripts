@@ -55,6 +55,15 @@ function testForFile(){
     mkdir 'DIRECTORIES'
     Move-Item -Path * -Destination 'DIRECTORIES'
 
-    exit
 
+}
+
+testForFile
+
+if($?){
+    Write-Host 'an unexpected error had occured, please try again or contact husamabdalla98@gmail.com to report bugs'
+}
+else{
+    Write-Host 'Operation Completed Successfully!'
+    exit 0
 }
