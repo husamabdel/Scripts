@@ -167,4 +167,4 @@ echo 'Process Completed for user: ' $USER ' on: ' $PCID
 else{Write-Host 'Error! wrong answer provided! Please try again'}
 
 }
-until($ans -ne 'a' || $ans -ne 'b')
+until($ans -ne 'a' -or $ans -ne 'b')
