@@ -8,7 +8,7 @@
 
 $USER = $env:UserName
 $PCID = $(hostname)
-$SERVER = '9.9.9.9'
+$SERVER = '140.147.32.139'
 $PROCESS_TERMINATE = 'Outlook.exe', 'ZoomOutlookIMPlugin.exe', 'lync.exe', 'UcMapi.exe', 'atmgr.exe', 'CiscoWebexStart.exe'
 
 #Check version installed:
@@ -98,7 +98,25 @@ function testStartup(){
 
 }
 
-#Calling in Net Check
+Write-Host "________          __  .__                 __     __________                     ___________.__        
+\_____  \  __ ___/  |_|  |   ____   ____ |  | __ \______   \__ __  ____  ______ \_   _____/|__|__  ___
+ /   |   \|  |  \   __\  |  /  _ \ /  _ \|  |/ /  |    |  _/  |  \/ ___\/  ___/  |    __)  |  \  \/  /
+/    |    \  |  /|  | |  |_(  <_> |  <_> )    <   |    |   \  |  / /_/  >___ \   |     \   |  |>    < 
+\_______  /____/ |__| |____/\____/ \____/|__|_ \  |______  /____/\___  /____  >  \___  /   |__/__/\_ \
+        \/                                    \/         \/     /_____/     \/       \/             \/"
+
+        Write-Host "Author: Husam Abdalla"
+        Write-Host "Version: 03/23/2022"
+
+Write-Host "Please enter an Option below:"
+
+do{
+
+$ans = Read-Host "a: Standard mode. b: Agressive Mode: "
+
+if($ans -eq 'a'){
+
+    #Calling in Net Check
 
 CheckNet
 
@@ -116,3 +134,37 @@ ipconfig /flushdns
 start Outlook.exe
 echo 'Exit code: ' $?
 echo 'Process Completed for user: ' $USER ' on: ' $PCID
+
+}
+elseif($ans -eq 'b'){
+
+#Calling in Net Check
+
+CheckNet
+
+#Calling in killTasks and flushing the dns, as well as starting outlook again.
+
+KillTasks
+
+#Remove problematic startups:
+
+testStartup
+
+#Lastly: 
+
+ipconfig /flushdns
+start Outlook.exe
+
+#Update GP:
+
+GpUpdate /Force
+shutdown -l
+
+echo 'Exit code: ' $?
+echo 'Process Completed for user: ' $USER ' on: ' $PCID
+
+}
+else{Write-Host 'Error! wrong answer provided! Please try again'}
+
+}
+until($ans -ne 'a' || $ans -ne 'b')
